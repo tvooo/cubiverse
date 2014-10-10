@@ -1,0 +1,33 @@
+public class GravitySphere extends ScriptableObject {
+  var sphere: GameObject;
+  var sphereIndicator: GameObject;
+  var spherePosition: Vector3;
+  var sphereSize: float;
+
+  public function GravitySphere(size: float, position: Vector3, gravitySpherePrefab, gravitySphereIndicatorPrefab) {
+    spherePosition = position;
+    sphereSize = size;
+    sphere = Instantiate(gravitySpherePrefab, spherePosition, Quaternion.identity);
+    sphere.layer = 8;
+
+    sphereIndicator = Instantiate(gravitySphereIndicatorPrefab, spherePosition, Quaternion.identity);
+    sphereIndicator.layer = 8;
+
+    sphere.transform.localScale *= sphereSize;
+    sphereIndicator.transform.localScale *= sphereSize;
+  }
+
+  public function move( newPosition: Vector3 ) {
+    spherePosition = newPosition;
+    sphere.transform.position = spherePosition;
+    sphereIndicator.transform.position = spherePosition;
+  }
+
+  public function getPosition() {
+    return spherePosition;
+  }
+
+  public function getSize() {
+    return sphereSize;
+  }
+}
