@@ -1,5 +1,4 @@
 /* Public variables */
-//var landscape: GameObject;
 var landscapeModels: GameObject[];
 var gravitySpherePrefab: GameObject;
 var gravitySphereIndicatorPrefab: GameObject;
@@ -7,7 +6,7 @@ var gravitySphereIndicatorPrefab: GameObject;
 /* Private variables */
 private var ray: Ray;
 private var hit: RaycastHit;
-private var currentSphere: GravitySphere;
+private var currentSphere: EffectSphere;
 private var landscapes: Landscape[];
 
 function Start() {
@@ -28,6 +27,11 @@ function Update () {
     currentSphere = new GravitySphere(3, Vector3.zero, gravitySpherePrefab, gravitySphereIndicatorPrefab);
   };
 
+  if(Input.GetButtonDown("Spawn Repulsion Sphere")) {
+    // spawn sphere
+    currentSphere = new RepulsionSphere(3, Vector3.zero, gravitySpherePrefab, gravitySphereIndicatorPrefab);
+  };
+
   if ( currentSphere ) {
     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
     var layerMask = 1 << 9;
@@ -36,8 +40,9 @@ function Update () {
       currentSphere.move(new Vector3(hit.point.x, hit.point.y, 0));
 
       for( var i = 0; i < landscapes.length; i++ ) {
-        if(landscapes[i]) {
-          landscapes[i].suckTowards(currentSphere.getPosition(), currentSphere.getSize(), Input.GetMouseButtonDown(0));
+        if(landscapes[i] != null && landscapes[i].isVisible()) {
+          //Debug.Log(currentSphere);
+          currentSphere.effect(landscapes[i], Input.GetMouseButtonDown(0));
         }
       }
 
