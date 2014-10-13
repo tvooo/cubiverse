@@ -2,6 +2,8 @@
 
 enum JumpState {Grounded, Jumped};
 
+public var spawnPoint: Transform;
+
 public var turnSmoothing : float = 15f;     // A smoothing value for turning the player.
 public var speedDampTime : float = 0.1f;    // The damping for the speed parameter
 private var grounded: boolean = false;
@@ -10,6 +12,8 @@ public var jumpPower: float = 5.0f;
 public var walkPower: float = 10f;
 
 public var jumpState: JumpState;
+
+private var flickerTimeout: int;
 
 function getUpwards() {
     if ( rigidbody.velocity.magnitude != 0) {
@@ -52,10 +56,25 @@ function Update () {
         Jump();
     }
     Walk( h );
+    flickerTimeout -= Time.deltaTime;
+    Debug.Log(flickerTimeout);
+    GetComponent(Flicker).animate = flickerTimeout > 0;
 }
 
 function isGrounded() {
     return Physics.Raycast(transform.position, -Vector3.up, collider.bounds.extents.y + 0.1f);
+}
+
+function OnCollisionEnter(collision: Collision) {
+    if (collision.other.gameObject.name == "PlaneOfDeath") {
+        Debug.Log("TOOOOOOOOOD");
+        flickerTimeout = 100;
+        GetComponent(Flicker).animate = true;
+        rigidbody.velocity = Vector3.zero;
+        rigidbody.angularVelocity = Vector3.zero;
+        rigidbody.MoveRotation(Quaternion.Euler(0, 0, 0));
+        rigidbody.MovePosition(spawnPoint.position);
+    }
 }
 
 function Jump() {

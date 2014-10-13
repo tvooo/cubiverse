@@ -22,7 +22,7 @@ public class RepulsionSphere extends EffectSphere {
         newVectorGlobal = vectorGlobal + (direction * (1 - Mathf.Pow(distance.magnitude / sphereRadius, 2)));
         newVectorLocal = transform.InverseTransformPoint(newVectorGlobal);
         vert = newVectorLocal;
-        //Debug.DrawLine (vectorGlobal, vectorGlobal + direction, Color.red, 5);
+        Debug.DrawLine (vectorGlobal, newVectorGlobal, Color.red, 5);
       }
     }
 
