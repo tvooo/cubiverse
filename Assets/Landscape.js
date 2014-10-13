@@ -15,7 +15,7 @@ public class Landscape {
   public function update(vertices: Vector3[], fix: boolean) {
     mesh.vertices = vertices;
     mesh.RecalculateNormals();
-    yield;
+    //yield;
 
     if(fix) {
       mesh.RecalculateBounds();
