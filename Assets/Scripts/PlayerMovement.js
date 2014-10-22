@@ -18,6 +18,9 @@ private var checkPoint: Transform;
 
 private var flickerTimeout: int;
 
+private var jump: AnimationState;
+
+
 function getUpwards() {
     if ( rigidbody.velocity.magnitude != 0) {
         return Vector3.up;
@@ -99,6 +102,9 @@ function Start() {
     checkPoint = currentLevel.getSpawnPoint();
     rigidbody.MovePosition(checkPoint.position);
     rigidbody.constraints = currentLevel.getConstraints();
+    
+    animation["jump"].wrapMode = WrapMode.Once;
+	jump = animation["jump"];
 }
 
 function nextLevel(level: Level) {
@@ -122,12 +128,13 @@ function Respawn() {
     rigidbody.MovePosition(checkPoint.transform.position);
 }
 
-function Jump() {
-    var direction: Vector3;
+ function Jump() {
+     var direction: Vector3;
     direction = getUpwards();
-    rigidbody.AddForce(direction * jumpPower, ForceMode.Impulse);
-    jumpState = JumpState.Jumped;
-}
+    rigidbody.AddForce(direction * jumpPower, ForceMode.Impulse); 
+    animation.Play("jump");
+    jumpState = JumpState.Jumped; 
+} 
 
 function Walk(horizontal : float)
 {
