@@ -98,20 +98,25 @@ function getCameraRotation() {
 function Start() {
     rigidbody.velocity = Vector3.zero;
     rigidbody.angularVelocity = Vector3.zero;
-    rigidbody.MoveRotation(Quaternion.Euler(0, 0, 90));
+    //rigidbody.MoveRotation(Quaternion.Euler(0, 0, 90));
+    rigidbody.MoveRotation(Quaternion.Euler(0, 0, 0));
     checkPoint = currentLevel.getSpawnPoint();
+    currentLevel.enter();
     rigidbody.MovePosition(checkPoint.position);
     rigidbody.constraints = currentLevel.getConstraints();
-    
+
     animation["jump"].wrapMode = WrapMode.Once;
 	jump = animation["jump"];
 }
 
 function nextLevel(level: Level) {
+    currentLevel.leave();
     currentLevel = level;
+    currentLevel.enter();
     rigidbody.velocity = Vector3.zero;
     rigidbody.angularVelocity = Vector3.zero;
-    rigidbody.MoveRotation(Quaternion.Euler(0, 0, 90));
+    //rigidbody.MoveRotation(Quaternion.Euler(0, 0, 90));
+    rigidbody.MoveRotation(Quaternion.Euler(0, 0, 0));
     checkPoint = currentLevel.getSpawnPoint();
     rigidbody.MovePosition(checkPoint.position);
     //rigidbody.MovePosition(mh.transform.position);
@@ -131,10 +136,10 @@ function Respawn() {
  function Jump() {
      var direction: Vector3;
     direction = getUpwards();
-    rigidbody.AddForce(direction * jumpPower, ForceMode.Impulse); 
+    rigidbody.AddForce(direction * jumpPower, ForceMode.Impulse);
     animation.Play("jump");
-    jumpState = JumpState.Jumped; 
-} 
+    jumpState = JumpState.Jumped;
+}
 
 function Walk(horizontal : float)
 {
@@ -150,6 +155,7 @@ function Walk(horizontal : float)
     movement = movement.normalized * 6.0f * Time.deltaTime;
     rigidbody.MovePosition (transform.position + movement);*/
     movement = currentLevel.getDirection() * horizontal * walkPower / weakness;
+    Debug.Log("Add force:" + currentLevel.getDirection());
     // Kann bisher nur Level 1 + 2
     /*movement.Set(
         0,//level == Level.Level1 ? horizontal * walkPower / weakness : 0,

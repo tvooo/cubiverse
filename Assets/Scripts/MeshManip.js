@@ -37,7 +37,7 @@ function Update () {
     var layerMask = 1 << 9;
     //layerMask = 0;
     if(Physics.Raycast(ray, hit, layerMask)) {
-      currentSphere.move(new Vector3(hit.point.x, hit.point.y, 0));
+      currentSphere.move(new Vector3(hit.point.x, hit.point.y, hit.point.z));
 
       for( var i = 0; i < landscapes.length; i++ ) {
         if(landscapes[i] != null && landscapes[i].isVisible()) {
