@@ -3,6 +3,7 @@ public enum MoveConstraint {
   Vertical
 };
 
+/* Public variables */
 public var rotation: int = 0;
 public var spawnPoint: Transform;
 public var moveConstraints: MoveConstraint = MoveConstraint.Horizontal;
@@ -12,32 +13,33 @@ public var checkPoints: CheckPoint[];
 public var ballContingent: int = 5;
 public var cubert: PlayerMovement;
 public var gravitySpherePrefab: GravSphere;
-private var currentSphere: GravSphere;
-
+public var repulsionSpherePrefab: RepSphere;
 public var startState: State;
-private var isActive: boolean = false;
 
-public var balls: GravSphere[];
-private var ballCounter: int = 0;
+/* Private variables */
+private var currentSphere: BaseSphere;
+private var isActive: boolean = false;
+private var balls: BaseSphere[];
+private var ballCounter: int;
 private var landscapes: Component[];
 
 function Start() {
   landscapes = GetComponentsInChildren(Transformable);
-  //resetLevel();
-  balls = new GravSphere[ballContingent];
+  balls = new BaseSphere[ballContingent];
+  ballCounter = ballContingent;
 }
 
 function resetLevel() {
   // Remove gravity balls, reset checkpoints
   if(balls) {
-    for (var ball: GravSphere in balls) {
+    for (var ball: BaseSphere in balls) {
       if(ball) {
         Debug.Log("Destroying sphere");
         Destroy(ball.gameObject);
       }
     }
   }
-  ballCounter = 0;
+  ballCounter = ballContingent;
 
   for(var checkPoint: CheckPoint in checkPoints) {
     checkPoint.reset();
@@ -58,27 +60,37 @@ function Update() {
     return;
 
   if(Input.GetButtonDown("Restart Level")) {
-    for (var ball: GravSphere in balls) {
+    for (var ball: BaseSphere in balls) {
       Debug.Log(ball);
     }
   }
 
-  if(Input.GetButtonDown("Spawn Gravity Sphere")) {
-    Debug.Log("Spawing");
-    currentSphere = Instantiate(gravitySpherePrefab, Vector3.zero, Quaternion.identity);
-    cubert.currentLevel.addSphere(currentSphere);
+  if(hasBalls() && Input.GetButtonDown("Spawn Gravity Sphere")) {
+    Debug.Log("Spawning Gravity Sphere");
+    currentSphere = Instantiate(gravitySpherePrefab, Vector3.zero, Quaternion.identity).GetComponent(BaseSphere);
+    addSphere(currentSphere);
+  };
+
+  if(hasBalls() && repulsionSpherePrefab && Input.GetButtonDown("Spawn Repulsion Sphere")) {
+    Debug.Log("Spawning Repulsion Sphere");
+    currentSphere = Instantiate(repulsionSpherePrefab, Vector3.zero, Quaternion.identity).GetComponent(BaseSphere);
+    addSphere(currentSphere);
   };
 
   if (currentSphere ) {
     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
     var layerMask = 1 << 9;
-    //layerMask = 0;
     if(Physics.Raycast(ray, hit, layerMask)) {
       currentSphere.transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z);
 
       for(var landscape: Component in landscapes) {
         if(/*isVisible()*/ true) {
-          currentSphere.effect(landscape.GetComponent(Transformable), Input.GetMouseButtonDown(0));
+          if(currentSphere.GetComponent(GravSphere)) {
+            currentSphere.GetComponent(GravSphere).effect(landscape.GetComponent(Transformable), Input.GetMouseButtonDown(0));
+          } else if(currentSphere.GetComponent(RepSphere)) {
+            currentSphere.GetComponent(RepSphere).effect(landscape.GetComponent(Transformable), Input.GetMouseButtonDown(0));
+          }
+
         }
       }
 
@@ -91,8 +103,14 @@ function Update() {
   }
 }
 
-function addSphere(sphere: GravSphere) {
-  balls[ballCounter++] = sphere;
+function addSphere(sphere: BaseSphere) {
+  if(ballCounter <= 0)
+    return;
+  balls[--ballCounter] = sphere;
+}
+
+function hasBalls() {
+  return ballCounter > 0;
 }
 
 function OnGUI() {
@@ -100,6 +118,7 @@ function OnGUI() {
     resetLevel();
     cubert.Respawn();
   }
+  if(isActive) GUI.Label (Rect (10, 140, 100, 20), "Balls:" + ballCounter + "/" + ballContingent);
 }
 
 
@@ -114,6 +133,8 @@ function leave() {
   ballPositionPlane.layer = 8;
   isActive = false;
 }
+
+/* Getters */
 
 function getSpawnPoint() {
   return spawnPoint;

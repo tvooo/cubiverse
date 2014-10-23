@@ -23,7 +23,7 @@ function Start() {
 function Update () {
   if(Input.GetButtonDown("Spawn Gravity Sphere")) {
     currentSphere = Instantiate(gravitySpherePrefab, Vector3.zero, Quaternion.identity);
-    cubert.currentLevel.addSphere(currentSphere);
+    //cubert.currentLevel.addSphere(currentSphere);
   };
 
   if(Input.GetButtonDown("Spawn Repulsion Sphere")) {

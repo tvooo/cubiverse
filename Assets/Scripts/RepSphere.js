@@ -18,14 +18,13 @@ function effect(landscape: Transformable, fix: boolean) {
   for (var vert: Vector3 in vertices) {
     vectorGlobal = landscapeTransform.TransformPoint(vert);
     if(GetComponent(BaseSphere).pointInSphere(vectorGlobal)) {
-      direction = transform.position - vectorGlobal;
-      // Linear
-      //newVectorGlobal = vectorGlobal + (direction * (1 - direction.magnitude / radius));
-      // x^2
-      newVectorGlobal = vectorGlobal + (direction * (1- Mathf.Pow(direction.magnitude / GetComponent(BaseSphere).sphereRadius, 2)));
+      distance = (vectorGlobal - transform.position);
+      normal = distance.normalized * GetComponent(BaseSphere).sphereRadius;
+      direction = normal - (vectorGlobal - transform.position);
+      newVectorGlobal = vectorGlobal + (direction * (1 - Mathf.Pow(distance.magnitude / GetComponent(BaseSphere).sphereRadius, 2)));
       newVectorLocal = landscapeTransform.InverseTransformPoint(newVectorGlobal);
       vert = newVectorLocal;
-      //Debug.DrawLine (vectorGlobal, newVectorGlobal, Color.red);
+      //Debug.DrawLine (vectorGlobal, newVectorGlobal, Color.red, 5);
     }
   }
 
