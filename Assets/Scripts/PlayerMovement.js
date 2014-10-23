@@ -177,7 +177,7 @@ function restartGame() {
 }
 
 function OnGUI() {
-    if(GUI.Button(Rect(10,100,100,30), "Restart Game")) {
+    if(GUI.Button(Rect(Screen.width - 110,10,100,30), "Restart Game")) {
         restartGame();
     }
 }

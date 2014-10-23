@@ -77,28 +77,45 @@ function Update() {
     addSphere(currentSphere);
   };
 
-  if (currentSphere ) {
+  if (currentSphere) {
     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
     var layerMask = 1 << 9;
-    if(Physics.Raycast(ray, hit, layerMask)) {
-      currentSphere.transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z);
 
-      for(var landscape: Component in landscapes) {
-        if(/*isVisible()*/ true) {
-          if(currentSphere.GetComponent(GravSphere)) {
-            currentSphere.GetComponent(GravSphere).effect(landscape.GetComponent(Transformable), Input.GetMouseButtonDown(0));
-          } else if(currentSphere.GetComponent(RepSphere)) {
-            currentSphere.GetComponent(RepSphere).effect(landscape.GetComponent(Transformable), Input.GetMouseButtonDown(0));
-          }
+    if(currentSphere.resizing) {
+      // Resizing
+      var size: float = 1 + ((Input.mousePosition - currentSphere.resizeOrigin).magnitude / 100);
+      Debug.Log(size);
 
+      currentSphere.setRadius(size);
+    } else {
+      // Moving
+      if(Physics.Raycast(ray, hit, layerMask)) {
+        currentSphere.transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+      }
+    }
+
+    for(var landscape: Component in landscapes) {
+      if(/*isVisible()*/ true) {
+        if(currentSphere.GetComponent(GravSphere)) {
+          currentSphere.GetComponent(GravSphere).effect(landscape.GetComponent(Transformable), Input.GetMouseButtonUp(0));
+        } else if(currentSphere.GetComponent(RepSphere)) {
+          currentSphere.GetComponent(RepSphere).effect(landscape.GetComponent(Transformable), Input.GetMouseButtonUp(0));
         }
-      }
 
-      /* Position sphere on mouse click */
-      if(Input.GetMouseButtonDown(0)) {
-        Debug.Log("Fixing sphere");
-        currentSphere = null;
       }
+    }
+
+    /* Position sphere on mouse click */
+    if(Input.GetMouseButtonDown(0)) {
+      Debug.Log("Fixing sphere");
+      currentSphere.resizeOrigin = Input.mousePosition;
+      currentSphere.resizing = true;
+
+    }
+    if(Input.GetMouseButtonUp(0)) {
+      currentSphere.resizing = false;
+      currentSphere = null;
+
     }
   }
 }
@@ -114,7 +131,7 @@ function hasBalls() {
 }
 
 function OnGUI() {
-  if(isActive && GUI.Button(Rect(10,50,100,30), "Reset Level")) {
+  if(isActive && GUI.Button(Rect(Screen.width - 220,10,100,30), "Reset Level")) {
     resetLevel();
     cubert.Respawn();
   }
