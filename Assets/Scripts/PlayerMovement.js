@@ -76,7 +76,7 @@ function isGrounded() {
 function OnCollisionEnter(collision: Collision) {
     if (collision.other.gameObject.name == "PlaneOfDeath") {
         Debug.Log("Cubert fell down into the abyss...");
-        gui.state = State.Death;
+        //gui.state = State.Death;
         Respawn();
     }
 }
@@ -87,10 +87,6 @@ function setCheckPoint(cp: CheckPoint) {
 
 function getLevel() {
     return currentLevel;
-}
-
-function rotate(degrees) {
-    //cameraRotation-90 * parseInt(player.getLevel());
 }
 
 function getCameraRotation() {
@@ -126,6 +122,10 @@ function nextLevel(level: Level) {
     //rigidbody.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionX;
 }
 
+function resetGame() {
+  // Remove ALL the gravity balls, reset ALL the checkpoints
+}
+
 function die() {
     Respawn();
 }
@@ -156,18 +156,7 @@ function Walk(horizontal : float)
         return;
 
     weakness = isGrounded() ? 1 : 10;
-    /*var movement: Vector3;
-    movement.Set(horizontal, 0, 0);
-    movement = movement.normalized * 6.0f * Time.deltaTime;
-    rigidbody.MovePosition (transform.position + movement);*/
     movement = currentLevel.getDirection() * horizontal * walkPower / weakness;
     Debug.Log("Add force:" + currentLevel.getDirection());
-    // Kann bisher nur Level 1 + 2
-    /*movement.Set(
-        0,//level == Level.Level1 ? horizontal * walkPower / weakness : 0,
-        0,
-        0//level == Level.Level2 ? horizontal * walkPower / weakness : 0
-    );*/
-
     rigidbody.AddForce (movement);
 }

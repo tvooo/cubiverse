@@ -6,24 +6,32 @@ public enum State {
 	Sphere,
 	Power,
 	Checkpoint,
-	House,
-	Death
+	House
 }
 
 public var state: State = State.Movement;
 private var text : String;
+public var cubert: PlayerMovement;
 
 function Update () {
-	if(Input.GetKey("space") && state == state.Movement){
-		state = State.Sphere;
-	} else if (Input.GetKey("g")  && state == state.Sphere){
-		state = State.Power;
-	} else if (Input.GetKey("x") && state == state.Power){
-		state = State.Checkpoint;
+	if(cubert.currentLevel.gameObject.name == "Main1") {
+		// Level 1
+		if(Input.GetKey("space") && state == state.Movement){
+			state = State.Sphere;
+		} else if (Input.GetKey("g")  && state == state.Sphere){
+			state = State.Power;
+		} else if (Input.GetKey("x") && state == state.Power){
+			state = State.Checkpoint;
+		}
+	} else if(cubert.currentLevel.gameObject.name == "Start2") {
+		// Level 2
+	} else if(cubert.currentLevel.gameObject.name == "Start3") {
+		// Level 3
 	}
+
 }
 
- function OnTriggerEnter(collider : Collider){
+function OnTriggerEnter(collider : Collider){
 	state = State.House;
 }
 
@@ -45,9 +53,6 @@ function OnGUI(){
 			break;
 		case State.House:
 			text = "Wow, this view was stunning! And what was that beautiful, shiny thing? Cubert felt very attracted to it. If he was able to reach it? He should definitly try!";
-			break;
-		case State.Death:
-			text = "Cubert fell into the abyss...";
 			break;
 		default:
 			text = "";

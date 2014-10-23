@@ -8,6 +8,24 @@ public var spawnPoint: Transform;
 public var moveConstraints: MoveConstraint = MoveConstraint.Horizontal;
 public var direction: Vector3 = Vector3.right;
 public var ballPositionPlane: GameObject;
+public var checkPoints: CheckPoint[];
+public var ballContingent: int = 5;
+
+private var test = {
+  "Movement": "hallo",
+  "b": "hallo"
+};
+
+private var balls;
+
+function Start() {
+  resetLevel();
+}
+
+function resetLevel() {
+  // Remove gravity balls, reset checkpoints
+  //balls =
+}
 
 function enter() {
   // Set up collision plane for balls
