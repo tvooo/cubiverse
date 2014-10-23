@@ -1,18 +1,19 @@
 ﻿#pragma strict
-var lala : float = 0.05;
 
+private var colli : float = -90;
 function Start () {
 
 }
 
-
 function Update () {
-	transform.Translate(-lala, 0, 0);
+	transform.Rotate (new Vector3 (0, colli, 0) * Time.deltaTime);
 }
+
 
 function OnTriggerEnter(collider : Collider) {
 	Debug.Log("I am colliding");
 	//transform.Translate(lala, 0, 0);
-	lala = -lala;
+	colli = -colli;
 	//Debug.Log("I am colliding");
 }
+
