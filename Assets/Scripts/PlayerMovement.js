@@ -13,6 +13,7 @@ public var jumpPower: float = 5.0f;
 public var walkPower: float = 10f;
 
 public var jumpState: JumpState;
+public var gui: WorldGUI;
 
 private var checkPoint: Transform;
 
@@ -75,6 +76,7 @@ function isGrounded() {
 function OnCollisionEnter(collision: Collision) {
     if (collision.other.gameObject.name == "PlaneOfDeath") {
         Debug.Log("Cubert fell down into the abyss...");
+        gui.state = State.Death;
         Respawn();
     }
 }
