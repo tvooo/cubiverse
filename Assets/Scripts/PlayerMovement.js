@@ -126,6 +126,10 @@ function nextLevel(level: Level) {
     //rigidbody.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionX;
 }
 
+function die() {
+    Respawn();
+}
+
 function Respawn() {
     flickerTimeout = 100;
     GetComponent(Flicker).animate = true;
