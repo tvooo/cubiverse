@@ -45,11 +45,19 @@ function Update () {
 		//Level 2
 	} else if(cubert.currentLevel.gameObject.name == "Level 2" ) {
 		if (state == State.House){
-			state = State.StartLevel2;}
-		if(Input.GetKey("x")  && state == State.StartLevel2){
-			state = State.Empty;}
+			state = State.StartLevel2;
+		} else if(Input.GetKey("x")  && state == State.StartLevel2){
+			state = State.Empty;
+		}
+		//Level 3	
 	} else if(cubert.currentLevel.gameObject.name == "Level 3") {
-		// Level 3
+		if (state == State.Killerball){
+			state = State.StartLevel3;
+		} else if(Input.GetKey("x")  && state == State.StartLevel3){
+			state = State.Empty;
+		} else if(Input.GetKey("r") && state == state.Rotation){
+			state = state.Empty;
+		}
 	}
 }
 
@@ -77,22 +85,22 @@ function OnGUI(){
 			break;
 		case State.Sphere:
 			text = "That was beautiful, wasnt it? Now, back to the powers. Maybe, if he only concentrated strong enough, and would focus all his thoughts on this one point… ";
-			instruction = "Press G to spawn a gravity sphere";
+			instruction = "Press G to spawn a gravity sphere and drag it with your cursor where you want to position it. Click to fix position.";
 			break;
 		case State.Power:
 			text = "Yes! It worked! There it was, a beautiful materialization of gravity! Amazing! But he needed to be careful. This sphere seemed to have quite an impact on the surface he was standing on. If he wasn’t careful, he could block himself or throw himself off this island, into the vast space of the universe… Scary! He should probably practice a little more and see if he could control his powers a little better.";
-			instruction= "Hold X to control strength and radius of the gravity sphere";
+			instruction= "To regulate the strength of the spheres, keep the mouse button pressed where you want to place the sphere and move the mouse.";
 			break;
 		case State.Checkpoint:
 			text = "See, that was better. This was going pretty well! Cubert could work with that. How about… pulling down that - thing - over there? Getting that peak a little closer to earth, so he could jump over it?";
-			instruction= "As soon as you spawned a gravity sphere, you can position it using your cursor";
+			instruction= "Use spheres to build slopes and manipulate peaks, to reach the end of the level.";
 			break;
 		case State.House:
 			text = "Wow, this view was stunning! And what was that beautiful, shiny thing? Cubert felt very attracted to it. If he was able to reach it? He should definitly try!";
 			//instruction= "";
 			break;
 		case State.StartLevel2:
-			intro = "He made it! Cubert discovered another island. Cubert, the emporer. He liked the sound of that. Cubert decided to continue his brave journey and to share more of his cubic awesomenes!  <i> continue by hitting x </i>"; 
+			intro = "He made it! Cubert discovered another island. Cubert, the emporer. He liked the sound of this title. Cubert decided to continue his brave journey and to share more of his cubic awesomenes!  <i> continue by hitting x </i>"; 
 			text="";
 			instruction = "";
 			GUI.Label(Rect((Screen.width/2)-250, (Screen.height/2)-250,500,500),intro, mySkin.customStyles[0]);
@@ -107,10 +115,8 @@ function OnGUI(){
 			GUI.Label(Rect((Screen.width/2)-250, (Screen.height/2)-250,500,500),intro, mySkin.customStyles[0]);
 			break;
 		case State.Rotation:
-			text = "And there was more to discover. On this island, there was more moving than just him. How exiting! Cubert was sure, he could use that to travel even further.";
-			break;
-		case State.Repulsion:
-			text = "Also something else was different. Cubert himself felt different. Stronger. Yes, even stronger than before. It was the type of satisfaction which goes with a new ability. He learned something new!";
+			text = "And there was more to discover. On this island, there was more moving than just him. How exciting! Cubert was sure, he could use that to travel even further. Lets see if they would be able to carry him! Also something else was different. Cubert himself felt different. Stronger. Yes, even stronger than before. It was the type of satisfaction which goes with a new ability. He learned something new!";
+			instruction = "Press R to create a repulsion sphere. You can handle them just like gravity spheres.";
 			break;
 		case State.Empty:
 			text="";
