@@ -1,15 +1,13 @@
-function Start() {
-
-}
-
-function Update () {
-
-}
+private var passed: boolean = false;
 
 function OnTriggerEnter(collider: Collider) {
-  collider.GetComponent(PlayerMovement).setCheckPoint(this);
-    //if (collision.other.gameObject.name == "PlaneOfDeath") {
-        Debug.Log(collider);
-      //  Respawn();
-    //}
+  if(passed)
+    return;
+  collider.GetComponent(PlayerMovement).setCheckPoint(this.transform);
+  passed = true;
+  Debug.Log(collider);
+}
+
+function reset() {
+  passed = false;
 }

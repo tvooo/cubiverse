@@ -81,8 +81,8 @@ function OnCollisionEnter(collision: Collision) {
     }
 }
 
-function setCheckPoint(cp: CheckPoint) {
-    checkPoint = cp.transform;
+function setCheckPoint(cp: Transform) {
+    checkPoint = cp;
 }
 
 function getLevel() {
@@ -157,6 +157,27 @@ function Walk(horizontal : float)
 
     weakness = isGrounded() ? 1 : 10;
     movement = currentLevel.getDirection() * horizontal * walkPower / weakness;
-    Debug.Log("Add force:" + currentLevel.getDirection());
+    //Debug.Log("Add force:" + currentLevel.getDirection());
     rigidbody.AddForce (movement);
+}
+
+function restartGame() {
+    var firstLevel: Level = GameObject.Find("Level 1").GetComponent(Level);
+    var secondLevel: Level = GameObject.Find("Level 2").GetComponent(Level);
+    //var thirdLevel: Level = GameObject.Find("Level 3").GetComponent(Level);
+
+    //thirdLevel.resetLevel();
+    //thirdLevel.leave();
+    secondLevel.resetLevel();
+    secondLevel.leave();
+    firstLevel.resetLevel();
+    firstLevel.enter();
+
+    Respawn();
+}
+
+function OnGUI() {
+    if(GUI.Button(Rect(10,100,100,30), "Restart Game")) {
+        restartGame();
+    }
 }
