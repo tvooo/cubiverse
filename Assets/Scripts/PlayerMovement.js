@@ -164,10 +164,10 @@ function Walk(horizontal : float)
 function restartGame() {
     var firstLevel: Level = GameObject.Find("Level 1").GetComponent(Level);
     var secondLevel: Level = GameObject.Find("Level 2").GetComponent(Level);
-    //var thirdLevel: Level = GameObject.Find("Level 3").GetComponent(Level);
+    var thirdLevel: Level = GameObject.Find("Level 3").GetComponent(Level);
 
-    //thirdLevel.resetLevel();
-    //thirdLevel.leave();
+    thirdLevel.resetLevel();
+    thirdLevel.leave();
     secondLevel.resetLevel();
     secondLevel.leave();
     firstLevel.resetLevel();
