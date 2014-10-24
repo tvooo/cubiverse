@@ -7,7 +7,7 @@ function Start () {
 }
 
 function Update () {
-	transform.Rotate (new Vector3 (0, colli, 0) * Time.deltaTime);
+	transform.Rotate (new Vector3 (0, 0, colli) * Time.deltaTime);
 }
 
 function OnTriggerEnter(collider : Collider) {
