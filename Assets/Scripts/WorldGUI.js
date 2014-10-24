@@ -93,7 +93,7 @@ function OnGUI(){
 			break;
 		case State.Checkpoint:
 			text = "See, that was better. This was going pretty well! Cubert could work with that. How about… pulling down that - thing - over there? Getting that peak a little closer to earth, so he could jump over it?";
-			instruction= "Use spheres to build slopes and manipulate peaks, to reach the end of the level.";
+			instruction= "Use spheres to build slopes and manipulate peaks, to reach the end of the level. But be careful - you only have a certain amount of spheres per island!";
 			break;
 		case State.House:
 			text = "Wow, this view was stunning! And what was that beautiful, shiny thing? Cubert felt very attracted to it. If he was able to reach it? He should definitly try!";
@@ -106,7 +106,7 @@ function OnGUI(){
 			GUI.Label(Rect((Screen.width/2)-250, (Screen.height/2)-250,500,500),intro, mySkin.customStyles[0]);
 			break; 
 		case State.Killerball:
-			text = "But what was that over there, that black... round... thing? THAT looked nasty. Nasty and dangerous. Of course, Cubert was not afraid. He was only careful, another of his great character traits. Being careful is extential to great success. Of course, so far he was reborn quite hasselfree, but we do not want to be too reckless, do we?"; 
+			text = "But what was that over there, that round... reddish... thing? THAT looked nasty. Nasty and dangerous. Of course, Cubert was not afraid. He was only careful, another of his great character traits. Being careful is extential to great success. Of course, so far he was reborn quite hasselfree, but we do not want to be too reckless, do we?"; 
 			break;
 		case State.StartLevel3:
 			intro = "Cubert was impressed by himself. He knew he was great, but his never ending thirst for adventure suprised even him. And how beautiful this world was! From here, he could see the small island he started from. He had come a long way... "; 

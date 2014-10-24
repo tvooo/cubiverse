@@ -4,6 +4,6 @@ function Start () {
 
 }
 
-function Update () {
-	//transform.localScale(0, 0, 0);
+function Update () {	
+	transform.localScale += Vector3(0.1,0.1,0.1) * Mathf.Sin(Time.deltaTime);
 }

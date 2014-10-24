@@ -18,8 +18,8 @@ function pointInSphere(pnt) {
 }
 
 function setRadius(radius: float) {
-  if(radius > 5)
-    radius = 5;
+  if(radius > 4)
+    radius = 4;
   sphereRadius = radius;
   transform.localScale = Vector3.one * radius;
 }
