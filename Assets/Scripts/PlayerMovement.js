@@ -113,17 +113,10 @@ function nextLevel(level: Level) {
     currentLevel.enter();
     rigidbody.velocity = Vector3.zero;
     rigidbody.angularVelocity = Vector3.zero;
-    //rigidbody.MoveRotation(Quaternion.Euler(0, 0, 90));
     rigidbody.MoveRotation(Quaternion.Euler(0, 0, 0));
     checkPoint = currentLevel.getSpawnPoint();
     rigidbody.MovePosition(checkPoint.position);
-    //rigidbody.MovePosition(mh.transform.position);
     rigidbody.constraints = currentLevel.getConstraints();
-    //rigidbody.constraints = RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionX;
-}
-
-function resetGame() {
-  // Remove ALL the gravity balls, reset ALL the checkpoints
 }
 
 function die() {
@@ -172,6 +165,13 @@ function restartGame() {
     secondLevel.leave();
     firstLevel.resetLevel();
     firstLevel.enter();
+    currentLevel = firstLevel;
+
+    rigidbody.velocity = Vector3.zero;
+    rigidbody.angularVelocity = Vector3.zero;
+    rigidbody.MoveRotation(Quaternion.Euler(0, 0, 0));
+    rigidbody.MovePosition(checkPoint.position);
+    rigidbody.constraints = currentLevel.getConstraints();
 
     Respawn();
 }

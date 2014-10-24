@@ -55,6 +55,7 @@ function resetLevel() {
 function Update() {
   var ray: Ray;
   var hit: RaycastHit;
+  var hitVector: Vector3;
 
   if(!isActive)
     return;
@@ -90,7 +91,14 @@ function Update() {
     } else {
       // Moving
       if(Physics.Raycast(ray, hit, layerMask)) {
-        currentSphere.transform.position = new Vector3(hit.point.x, hit.point.y, hit.point.z);
+        if(gameObject.name == "Level 1")
+          hitVector = new Vector3(hit.point.x, hit.point.y, ballPositionPlane.transform.position.z);
+        if(gameObject.name == "Level 2")
+          hitVector = new Vector3(ballPositionPlane.transform.position.x, hit.point.y, hit.point.z);
+        if(gameObject.name == "Level 3")
+          hitVector = new Vector3(hit.point.x, hit.point.y, ballPositionPlane.transform.position.z);
+
+        currentSphere.transform.position = hitVector;
       }
     }
 
@@ -135,7 +143,11 @@ function OnGUI() {
     resetLevel();
     cubert.Respawn();
   }
-  if(isActive) GUI.Label (Rect (10, 140, 100, 20), "Balls:" + ballCounter + "/" + ballContingent);
+  if(isActive && GUI.Button(Rect(Screen.width - 380,10,150,30), "Go to last Checkpoint")) {
+    //resetLevel();
+    cubert.Respawn();
+  }
+  if(isActive) GUI.Label (Rect (Screen.width - 450, 15, 70, 50), "Balls:" + ballCounter + "/" + ballContingent);
 }
 
 
