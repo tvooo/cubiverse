@@ -1,3 +1,5 @@
+#pragma strict
+
 private var baseSphere: BaseSphere;
 
 function Start() {
@@ -13,6 +15,8 @@ function effect(landscape: Transformable, fix: boolean) {
   var vectorGlobal: Vector3;
   var newVectorGlobal: Vector3;
   var newVectorLocal: Vector3;
+  var distance: Vector3;
+  var normal: Vector3;
   var landscapeTransform = landscape.transform;
 
   for (var vert: Vector3 in vertices) {

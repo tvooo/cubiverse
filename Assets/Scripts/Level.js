@@ -3,6 +3,14 @@ public enum MoveConstraint {
   Vertical
 };
 
+public enum SpawnProgress {
+  Initiate,
+  Position,
+  Zoom,
+  Fix,
+  Idle
+}
+
 /* Public variables */
 public var rotation: int = 0;
 public var spawnPoint: Transform;
@@ -22,6 +30,8 @@ private var isActive: boolean = false;
 private var balls: BaseSphere[];
 private var ballCounter: int;
 private var landscapes: Component[];
+private var spawnProgress: SpawnProgress = SpawnProgress.Idle;
+private var spawnZoomInverse: boolean = true;
 
 function Start() {
   landscapes = GetComponentsInChildren(Transformable);
@@ -52,43 +62,110 @@ function resetLevel() {
   cubert.setCheckPoint(spawnPoint);
 }
 
+private var touchSpawning: boolean = false;
+
 function Update() {
   var ray: Ray;
   var hit: RaycastHit;
+  var hitZero: RaycastHit;
+  var hitOne: RaycastHit;
   var hitVector: Vector3;
+  var layerMask = 1 << 9;
+  var size: float;
 
   if(!isActive)
     return;
 
-  if(Input.GetButtonDown("Restart Level")) {
-    for (var ball: BaseSphere in balls) {
-      Debug.Log(ball);
-    }
-  }
-
-  if(hasBalls() && Input.GetButtonDown("Spawn Gravity Sphere")) {
+  if(hasBalls() && spawnProgress == SpawnProgress.Idle && Input.GetButtonDown("Spawn Gravity Sphere")) {
     Debug.Log("Spawning Gravity Sphere");
     currentSphere = Instantiate(gravitySpherePrefab, Vector3.zero, Quaternion.identity).GetComponent(BaseSphere);
     addSphere(currentSphere);
+    spawnProgress = SpawnProgress.Position;
   };
 
-  if(hasBalls() && repulsionSpherePrefab && Input.GetButtonDown("Spawn Repulsion Sphere")) {
+  if(hasBalls() && spawnProgress == SpawnProgress.Idle && repulsionSpherePrefab && Input.GetButtonDown("Spawn Repulsion Sphere")) {
     Debug.Log("Spawning Repulsion Sphere");
     currentSphere = Instantiate(repulsionSpherePrefab, Vector3.zero, Quaternion.identity).GetComponent(BaseSphere);
     addSphere(currentSphere);
+    spawnProgress = SpawnProgress.Position;
   };
 
-  if (currentSphere) {
+  #if UNITY_ANDROID
+    if (Input.touchCount == 2 && !cubert.moving) {
+      // Store both touches.
+      var touchZero = Input.GetTouch(0);
+      var touchOne = Input.GetTouch(1);
+      var rayZero: Ray = Camera.main.ScreenPointToRay(touchZero.position);
+      var rayOne: Ray = Camera.main.ScreenPointToRay(touchOne.position);
+
+      var touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+      var touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+
+      // Find the magnitude of the vector (the distance) between the touches in each frame.
+      var prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+      var touchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+
+      // Find the position in the previous frame of each touch.
+      if(hasBalls() && spawnProgress == SpawnProgress.Idle) {
+        // Just started touching!
+        spawnProgress = SpawnProgress.Initiate;
+      }
+      if(spawnProgress == SpawnProgress.Initiate && prevTouchDeltaMag > touchDeltaMag) {
+        currentSphere = Instantiate(gravitySpherePrefab, Vector3.zero, Quaternion.identity).GetComponent(BaseSphere);
+        addSphere(currentSphere);
+        spawnProgress = SpawnProgress.Zoom;
+        spawnZoomInverse = true;
+      }
+      if(spawnProgress == SpawnProgress.Initiate && prevTouchDeltaMag < touchDeltaMag) {
+        currentSphere = Instantiate(repulsionSpherePrefab, Vector3.zero, Quaternion.identity).GetComponent(BaseSphere);
+        addSphere(currentSphere);
+        spawnProgress = SpawnProgress.Zoom;
+        spawnZoomInverse = false;
+      }
+      if(spawnProgress == SpawnProgress.Zoom) {
+        // Resize
+        if(spawnZoomInverse) {
+          //size = Mathf.Clamp(currentSphere.maxSize - touchDeltaMag / 150, 1.0, currentSphere.maxSize);
+          if(Physics.Raycast(rayZero, hitZero, layerMask) && Physics.Raycast(rayOne, hitOne, layerMask)) {
+
+            size = Mathf.Clamp(currentSphere.maxSize - ((hitZero.point - hitOne.point).magnitude / 4), 1.0, currentSphere.maxSize);
+          }
+        } else {
+          //size = Mathf.Clamp(1 + touchDeltaMag / 150, 1.0, currentSphere.maxSize);
+          if(Physics.Raycast(rayZero, hitZero, layerMask) && Physics.Raycast(rayOne, hitOne, layerMask)) {
+
+            size = (hitZero.point - hitOne.point).magnitude / 4;
+          }
+        }
+        currentSphere.setRadius(size);
+
+        // Position
+        var middle: Vector3 = Vector2.Lerp(touchZero.position, touchOne.position, 0.5);
+
+
+        ray = Camera.main.ScreenPointToRay(middle);
+
+        if(Physics.Raycast(ray, hit, layerMask)) {
+          if(gameObject.name == "Level 1")
+            hitVector = new Vector3(hit.point.x, hit.point.y, ballPositionPlane.transform.position.z);
+          if(gameObject.name == "Level 2")
+            hitVector = new Vector3(ballPositionPlane.transform.position.x, hit.point.y, hit.point.z);
+          if(gameObject.name == "Level 3")
+            hitVector = new Vector3(hit.point.x, hit.point.y, ballPositionPlane.transform.position.z);
+
+          currentSphere.transform.position = hitVector;
+        }
+      }
+    }
+  #endif
+
+  #if UNITY_STANDALONE
     ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    var layerMask = 1 << 9;
 
-    if(currentSphere.resizing) {
-      // Resizing
-      var size: float = 1 + ((Input.mousePosition - currentSphere.resizeOrigin).magnitude / 100);
-      Debug.Log(size);
-
+    if(spawnProgress == SpawnProgress.Zoom) {
+      size = 1 + ((Input.mousePosition - currentSphere.resizeOrigin).magnitude / 100);
       currentSphere.setRadius(size);
-    } else {
+    } else if(spawnProgress == SpawnProgress.Position) {
       // Moving
       if(Physics.Raycast(ray, hit, layerMask)) {
         if(gameObject.name == "Level 1")
@@ -101,31 +178,40 @@ function Update() {
         currentSphere.transform.position = hitVector;
       }
     }
+  #endif
 
+  #if UNITY_ANDROID
+    if(Input.touchCount == 0 && spawnProgress == SpawnProgress.Zoom) {
+      spawnProgress = SpawnProgress.Fix;
+    }
+  #endif
+
+  #if UNITY_STANDALONE
+    if(Input.GetMouseButtonDown(0)) {
+      currentSphere.resizeOrigin = Input.mousePosition;
+      spawnProgress = SpawnProgress.Zoom;
+    }
+    if(spawnProgress == SpawnProgress.Zoom && Input.GetMouseButtonUp(0)) {
+      spawnProgress = SpawnProgress.Fix;
+    }
+  #endif
+
+  if(currentSphere) {
     for(var landscape: Component in landscapes) {
-      if(/*isVisible()*/ true) {
-        if(currentSphere.GetComponent(GravSphere)) {
-          currentSphere.GetComponent(GravSphere).effect(landscape.GetComponent(Transformable), Input.GetMouseButtonUp(0));
-        } else if(currentSphere.GetComponent(RepSphere)) {
-          currentSphere.GetComponent(RepSphere).effect(landscape.GetComponent(Transformable), Input.GetMouseButtonUp(0));
-        }
-
+      if(currentSphere.GetComponent(GravSphere)) {
+        currentSphere.GetComponent(GravSphere).effect(landscape.GetComponent(Transformable), spawnProgress == SpawnProgress.Fix);
+      } else if(currentSphere.GetComponent(RepSphere)) {
+        currentSphere.GetComponent(RepSphere).effect(landscape.GetComponent(Transformable), spawnProgress == SpawnProgress.Fix);
       }
     }
-
-    /* Position sphere on mouse click */
-    if(Input.GetMouseButtonDown(0)) {
-      Debug.Log("Fixing sphere");
-      currentSphere.resizeOrigin = Input.mousePosition;
-      currentSphere.resizing = true;
-
-    }
-    if(Input.GetMouseButtonUp(0)) {
-      currentSphere.resizing = false;
-      currentSphere = null;
-
-    }
   }
+
+  if(spawnProgress == SpawnProgress.Fix) {
+    currentSphere = null;
+    spawnProgress = SpawnProgress.Idle;
+  }
+
+  Debug.Log(spawnProgress);
 }
 
 function addSphere(sphere: BaseSphere) {

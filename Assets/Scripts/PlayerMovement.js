@@ -15,12 +15,19 @@ public var walkPower: float = 10f;
 public var jumpState: JumpState;
 public var gui: WorldGUI;
 
+public var moving: boolean = false;
+
 private var checkPoint: Transform;
 
 private var flickerTimeout: int;
 
 private var jump: AnimationState;
 
+private var btnSize: int = Screen.height / 5;;
+
+private var leftBtn: Rect = new Rect(10, Screen.height-10-btnSize, btnSize, btnSize);
+private var rightBtn: Rect = new Rect(10+btnSize, Screen.height-10-btnSize, btnSize, btnSize);
+private var jumpBtn: Rect = new Rect(Screen.width-10-btnSize, Screen.height-10-btnSize, btnSize, btnSize);
 
 function getUpwards() {
     if ( rigidbody.velocity.magnitude != 0) {
@@ -51,12 +58,10 @@ function getUpwards() {
     }
 }
 
-function FixedUpdate () {
-
-}
-
 function Update () {
     var h : float = Input.GetAxis("Walk");
+    var walking: boolean = false;
+
     if(isGrounded())
         jumpState = JumpState.Grounded;
     if(Input.GetButtonDown("MyJump") && jumpState == JumpState.Grounded) {
@@ -67,6 +72,28 @@ function Update () {
     GetComponent(Flicker).animate = flickerTimeout > 0;
 
     Debug.DrawLine(transform.position, (transform.position + transform.forward), Color.red);
+
+    #if UNITY_ANDROID
+    moving = false;
+    for(var t: Touch in Input.touches) {
+        var vec: Vector2 = t.position;
+        vec.y = Screen.height - vec.y; // You need to invert since GUI and screen have differnet coordinate system
+        if(leftBtn.Contains(vec) && !walking) {
+            Walk(-1);
+            walking = true;
+        }
+        if(rightBtn.Contains(vec) && !walking) {
+            Walk(1);
+            walking = true;
+        }
+        if(jumpBtn.Contains(vec) && jumpState == JumpState.Grounded) {
+            Jump();
+        }
+        if(jumpBtn.Contains(vec) || leftBtn.Contains(vec) || rightBtn.Contains(vec)) {
+            moving = true;
+        }
+    }
+    #endif
 }
 
 function isGrounded() {
