@@ -4,7 +4,12 @@ public var mySkin : GUISkin;
 var customIntro : GUIStyle;
 var customInstruction : GUIStyle;
 var customText : GUIStyle;
- 
+
+public var sndIntro: AudioClip;
+public var sndLevel1: AudioClip;
+public var sndLevel2: AudioClip;
+public var sndLevel3: AudioClip;
+public var sndMagicHouse: AudioClip;
 
 private var rctOff : RectOffset;
 
@@ -35,24 +40,32 @@ function Update () {
 	if(cubert.currentLevel.gameObject.name == "Level 1") {
 		if(Input.GetKey("x")  && state == State.StartLevel1){
 			state = State.Movement;
+			cubert.speech.Stop();
+			cubert.speech.PlayOneShot(sndLevel1);
 		} else if (Input.GetKey("space")  && state == State.Movement){
 			state = State.Sphere;
 		} else if (Input.GetKey("g")  && state == State.Sphere){
 			state = State.Power;
 		} else if (Input.GetKey("x") && state == State.Power){
 			state = State.Checkpoint;
+			cubert.speech.Stop();
+			cubert.speech.PlayOneShot(sndMagicHouse);
 		}
 		//Level 2
 	} else if(cubert.currentLevel.gameObject.name == "Level 2" ) {
 		if (state == State.House){
 			state = State.StartLevel2;
+			cubert.speech.Stop();
+			cubert.speech.PlayOneShot(sndLevel2);
 		} else if(Input.GetKey("x")  && state == State.StartLevel2){
 			state = State.Empty;
 		}
-		//Level 3	
+		//Level 3
 	} else if(cubert.currentLevel.gameObject.name == "Level 3") {
 		if (state == State.Killerball){
 			state = State.StartLevel3;
+			cubert.speech.Stop();
+			cubert.speech.PlayOneShot(sndLevel3);
 		} else if(Input.GetKey("x")  && state == State.StartLevel3){
 			state = State.Empty;
 		} else if(Input.GetKey("r") && state == state.Rotation){
@@ -61,7 +74,12 @@ function Update () {
 	}
 }
 
-
+function Start() {
+	if(state == State.StartLevel1) {
+		cubert.speech.Stop();
+		cubert.speech.PlayOneShot(sndIntro);
+	}
+}
 
 
 function OnCollisionEnter(collision : Collision){
@@ -73,7 +91,7 @@ function OnCollisionEnter(collision : Collision){
 
 function OnGUI(){
 	GUI.skin = mySkin;
-      
+
 	switch(state) {
 		case State.StartLevel1:
 			intro = "Cuberts world was out of order. He could feel it. to him, but he was happy anyway.";
@@ -100,16 +118,16 @@ function OnGUI(){
 			//instruction= "";
 			break;
 		case State.StartLevel2:
-			intro = "He made it! Cubert discovered another island. Cubert, the emporer. He liked the sound of this title. Cubert decided to continue his brave journey and to share more of his cubic awesomenes!  <i> continue by hitting x </i>"; 
+			intro = "He made it! Cubert discovered another island. Cubert, the emporer. He liked the sound of this title. Cubert decided to continue his brave journey and to share more of his cubic awesomenes!  <i> continue by hitting x </i>";
 			text="";
 			instruction = "";
 			//GUI.Label(Rect((Screen.width/2)-250, (Screen.height/2)-250,500,500),intro, mySkin.customStyles[0]);
-			break; 
+			break;
 		case State.Killerball:
-			text = "But what was that over there, that round... reddish... thing? THAT looked nasty. Nasty and dangerous. Of course, Cubert was not afraid. He was only careful, another of his great character traits. Being careful is extential to great success. Of course, so far he was reborn quite hasselfree, but we do not want to be too reckless, do we?"; 
+			text = "But what was that over there, that round... reddish... thing? THAT looked nasty. Nasty and dangerous. Of course, Cubert was not afraid. He was only careful, another of his great character traits. Being careful is extential to great success. Of course, so far he was reborn quite hasselfree, but we do not want to be too reckless, do we?";
 			break;
 		case State.StartLevel3:
-			intro = "Cubert was impressed by himself. He knew he was great, but his never ending thirst for adventure suprised even him. And how beautiful this world was! From here, he could see the small island he started from. He had come a long way... "; 
+			intro = "Cubert was impressed by himself. He knew he was great, but his never ending thirst for adventure suprised even him. And how beautiful this world was! From here, he could see the small island he started from. He had come a long way... ";
 			text="";
 			instruction = "";
 			//GUI.Label(Rect((Screen.width/2)-250, (Screen.height/2)-250,500,500),intro, mySkin.customStyles[0]);
@@ -125,7 +143,7 @@ function OnGUI(){
 		default:
 			text = "";
 	}
-	
+
 	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height));
 	GUILayout.Label(intro, mySkin.customStyles[0]);
 	GUILayout.Label("Balls: " + cubert.currentLevel.ballCounter + " / " + cubert.currentLevel.ballContingent, mySkin.customStyles[2]);

@@ -7,8 +7,9 @@ public var currentLevel: Level;
 
 public var turnSmoothing : float = 15f;     // A smoothing value for turning the player.
 public var speedDampTime : float = 0.1f;    // The damping for the speed parameter
+public var speech: AudioSource;
 private var grounded: boolean = false;
-
+public var sndKill: AudioClip[];
 public var jumpPower: float = 5.0f;
 public var walkPower: float = 10f;
 
@@ -73,8 +74,8 @@ function Update () {
     flickerTimeout -= Time.deltaTime;
     GetComponent(Flicker).animate = flickerTimeout > 0;
 
-    Debug.DrawLine(transform.position, (transform.position + transform.forward), Color.red);
-    Debug.DrawLine(transform.position, (transform.position + getUpwards()), isGrounded() ? Color.blue : Color.yellow);
+    //Debug.DrawLine(transform.position, (transform.position + transform.forward), Color.red);
+    //Debug.DrawLine(transform.position, (transform.position + getUpwards()), isGrounded() ? Color.blue : Color.yellow);
 
     #if UNITY_ANDROID
     moving = false;
@@ -100,15 +101,11 @@ function Update () {
 }
 
 function isGrounded() {
-    //Debug.Log(rigidbody.velocity.y);
     return Physics.Raycast(transform.position, -Vector3.up, collider.bounds.extents.y + 0.1f)/* && (rigidbody.velocity.y <= 1f)*/;
 }
 
 function OnCollisionEnter(collision: Collision) {
     if (collision.other.gameObject.name == "PlaneOfDeath") {
-        Debug.Log("Cubert fell down into the abyss...");
-        //gui.state = State.Death;
-		audio.PlayOneShot(scream);
         die();
     }
 }
@@ -126,6 +123,7 @@ function getCameraRotation() {
 }
 
 function Start() {
+    Random.seed = 42;
     rigidbody.velocity = Vector3.zero;
     rigidbody.angularVelocity = Vector3.zero;
     //rigidbody.MoveRotation(Quaternion.Euler(0, 0, 90));
@@ -149,8 +147,11 @@ function nextLevel(level: Level) {
 }
 
 function die() {
+    var kill: int = Mathf.Round(Random.Range(0, sndKill.Length-1));
+    speech.Stop();
+    Debug.Log(kill);
+    speech.PlayOneShot(sndKill[ kill ]);
     Respawn();
-    audio.PlayOneShot(scream);
 }
 
 function Respawn() {
@@ -179,7 +180,6 @@ function Walk(horizontal : float)
 
     weakness = isGrounded() ? 1 : 10;
     movement = currentLevel.getDirection() * horizontal * walkPower / weakness;
-    Debug.Log("Add force:" + movement);
     rigidbody.AddForce (movement);
 }
 

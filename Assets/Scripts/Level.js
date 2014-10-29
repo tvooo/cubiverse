@@ -44,7 +44,6 @@ function resetLevel() {
   if(balls) {
     for (var ball: BaseSphere in balls) {
       if(ball) {
-        Debug.Log("Destroying sphere");
         Destroy(ball.gameObject);
       }
     }
@@ -77,14 +76,12 @@ function Update() {
     return;
 
   if(hasBalls() && spawnProgress == SpawnProgress.Idle && Input.GetButtonDown("Spawn Gravity Sphere")) {
-    Debug.Log("Spawning Gravity Sphere");
     currentSphere = Instantiate(gravitySpherePrefab, Vector3.zero, Quaternion.identity).GetComponent(BaseSphere);
     addSphere(currentSphere);
     spawnProgress = SpawnProgress.Position;
   };
 
   if(hasBalls() && spawnProgress == SpawnProgress.Idle && repulsionSpherePrefab && Input.GetButtonDown("Spawn Repulsion Sphere")) {
-    Debug.Log("Spawning Repulsion Sphere");
     currentSphere = Instantiate(repulsionSpherePrefab, Vector3.zero, Quaternion.identity).GetComponent(BaseSphere);
     addSphere(currentSphere);
     spawnProgress = SpawnProgress.Position;
@@ -210,8 +207,6 @@ function Update() {
     currentSphere = null;
     spawnProgress = SpawnProgress.Idle;
   }
-
-  Debug.Log(spawnProgress);
 }
 
 function addSphere(sphere: BaseSphere) {
