@@ -11,8 +11,5 @@ function Update () {
 }
 
 function OnTriggerEnter(collider : Collider) {
-	Debug.Log("I am colliding");
-	//transform.Translate(lala, 0, 0);
 	colli = -colli;
-	//Debug.Log("I am colliding");
 }

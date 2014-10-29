@@ -21,8 +21,8 @@ function updateMesh(vertices: Vector3[], fix: boolean) {
     mesh.RecalculateBounds();
     mesh.RecalculateNormals();
     // Recalculating the collider is ****in' heavy on the CPU!
-    coll.mesh = null;
-    coll.mesh = mesh;
+    coll.sharedMesh = null;
+    coll.sharedMesh = mesh;
 
     currentVertices = vertices;
   }

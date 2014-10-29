@@ -10,6 +10,10 @@ public var sndLevel1: AudioClip;
 public var sndLevel2: AudioClip;
 public var sndLevel3: AudioClip;
 public var sndMagicHouse: AudioClip;
+public var sndCubifly: AudioClip;
+public var sndSuperhero: AudioClip;
+public var sndEnergy: AudioClip;
+//public var sndMagicHouse: AudioClip;
 
 private var rctOff : RectOffset;
 
@@ -44,12 +48,16 @@ function Update () {
 			cubert.speech.PlayOneShot(sndLevel1);
 		} else if (Input.GetKey("space")  && state == State.Movement){
 			state = State.Sphere;
+			cubert.speech.Stop();
+			cubert.speech.PlayOneShot(sndSuperhero);
 		} else if (Input.GetKey("g")  && state == State.Sphere){
 			state = State.Power;
+			cubert.speech.Stop();
+			cubert.speech.PlayOneShot(sndEnergy);
 		} else if (Input.GetKey("x") && state == State.Power){
 			state = State.Checkpoint;
-			cubert.speech.Stop();
-			cubert.speech.PlayOneShot(sndMagicHouse);
+			//cubert.speech.Stop();
+			//cubert.speech.PlayOneShot(sndMagicHouse);
 		}
 		//Level 2
 	} else if(cubert.currentLevel.gameObject.name == "Level 2" ) {
@@ -72,12 +80,14 @@ function Update () {
 			state = state.Empty;
 		}
 	}
+	//Debug.Log(GameObject.Find("Main Camera").GetComponent(Animation).isPlaying);
 }
 
 function Start() {
 	if(state == State.StartLevel1) {
 		cubert.speech.Stop();
 		cubert.speech.PlayOneShot(sndIntro);
+		GameObject.Find("Main Camera").GetComponent(Animation).Play("Intro2");
 	}
 }
 

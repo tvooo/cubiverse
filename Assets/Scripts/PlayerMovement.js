@@ -74,8 +74,8 @@ function Update () {
     flickerTimeout -= Time.deltaTime;
     GetComponent(Flicker).animate = flickerTimeout > 0;
 
-    //Debug.DrawLine(transform.position, (transform.position + transform.forward), Color.red);
-    //Debug.DrawLine(transform.position, (transform.position + getUpwards()), isGrounded() ? Color.blue : Color.yellow);
+    Debug.DrawLine(transform.position, (transform.position + transform.forward), Color.red);
+    Debug.DrawLine(transform.position, (transform.position + getUpwards()), isGrounded() ? Color.blue : Color.yellow);
 
     #if UNITY_ANDROID
     moving = false;
@@ -127,7 +127,7 @@ function Start() {
     rigidbody.velocity = Vector3.zero;
     rigidbody.angularVelocity = Vector3.zero;
     //rigidbody.MoveRotation(Quaternion.Euler(0, 0, 90));
-    rigidbody.MoveRotation(Quaternion.Euler(0, 90, 0));
+    rigidbody.MoveRotation(Quaternion.Euler(0, currentLevel.rotation, 0));
     checkPoint = currentLevel.getSpawnPoint();
     currentLevel.enter();
     rigidbody.MovePosition(checkPoint.position);

@@ -12,12 +12,12 @@ var wantedRotationAngle;
 
 function Start() {
   target = player.GetComponent(Transform);
-  wantedRotationAngle = player.getCameraRotation();
+  wantedRotationAngle = 0;//player.getCameraRotation();
 }
 
 function LateUpdate () {
   // Early out if we don't have a target
-  if (!target)
+  if (!target/* || animation.isPlaying*/)
     return;
 
   // Calculate the current rotation angles
