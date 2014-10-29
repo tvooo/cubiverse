@@ -31,16 +31,16 @@ private var rightBtn: Rect = new Rect(10+btnSize, Screen.height-10-btnSize, btnS
 private var jumpBtn: Rect = new Rect(Screen.width-10-btnSize, Screen.height-10-btnSize, btnSize, btnSize);
 
 function getUpwards() {
-    if ( rigidbody.velocity.magnitude != 0) {
+    if ( rigidbody.velocity.magnitude != 0 || rigidbody.angularVelocity.magnitude != 0) {
         return Vector3.up;
     }
     var forwardAngle = Vector3.Angle(transform.forward, Vector3.up);
     var backwardAngle = Vector3.Angle(-transform.forward, Vector3.up);
     var upAngle = Vector3.Angle(transform.up, Vector3.up);
     var downAngle = Vector3.Angle(-transform.up, Vector3.up);
-    if(forwardAngle < 90) {
+    if(forwardAngle <= 90) {
         // eher forward
-        if(upAngle < 90) {
+        if(upAngle <= 90) {
             // eher up
             return (upAngle < forwardAngle) ? transform.up : transform.forward;
         } else {
@@ -49,7 +49,7 @@ function getUpwards() {
         }
     } else {
         // eher backward
-        if(upAngle < 90) {
+        if(upAngle <= 90) {
             // eher up
             return (upAngle < backwardAngle) ? transform.up : -transform.forward;
         } else {
@@ -74,6 +74,7 @@ function Update () {
     GetComponent(Flicker).animate = flickerTimeout > 0;
 
     Debug.DrawLine(transform.position, (transform.position + transform.forward), Color.red);
+    Debug.DrawLine(transform.position, (transform.position + getUpwards()), isGrounded() ? Color.blue : Color.yellow);
 
     #if UNITY_ANDROID
     moving = false;
@@ -99,7 +100,8 @@ function Update () {
 }
 
 function isGrounded() {
-    return Physics.Raycast(transform.position, -Vector3.up, collider.bounds.extents.y + 0.1f);
+    //Debug.Log(rigidbody.velocity.y);
+    return Physics.Raycast(transform.position, -Vector3.up, collider.bounds.extents.y + 0.1f)/* && (rigidbody.velocity.y <= 1f)*/;
 }
 
 function OnCollisionEnter(collision: Collision) {
@@ -127,7 +129,7 @@ function Start() {
     rigidbody.velocity = Vector3.zero;
     rigidbody.angularVelocity = Vector3.zero;
     //rigidbody.MoveRotation(Quaternion.Euler(0, 0, 90));
-    rigidbody.MoveRotation(Quaternion.Euler(0, 0, 0));
+    rigidbody.MoveRotation(Quaternion.Euler(0, 90, 0));
     checkPoint = currentLevel.getSpawnPoint();
     currentLevel.enter();
     rigidbody.MovePosition(checkPoint.position);
@@ -177,7 +179,7 @@ function Walk(horizontal : float)
 
     weakness = isGrounded() ? 1 : 10;
     movement = currentLevel.getDirection() * horizontal * walkPower / weakness;
-    //Debug.Log("Add force:" + currentLevel.getDirection());
+    Debug.Log("Add force:" + movement);
     rigidbody.AddForce (movement);
 }
 
