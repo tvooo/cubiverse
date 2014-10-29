@@ -76,7 +76,7 @@ function OnGUI(){
       
 	switch(state) {
 		case State.StartLevel1:
-			intro = "Cuberts world was out of order. He could feel it. Something did not work as it used to. His nice, square world broke apart. He never really understood the rules of this world, they felt a little made up to him, but he was happy anyway. He needed to fix it! And he knew he could, because - Cubert had superpowers! Or - at least, powers.  Something was different about him. Whatever it was that was gone from his world and let it drift apart, it was still with him. And maybe he could share it? Spread it somehow, to put everything back into place? He would need help though. He had super powers, but he was a cube after all. <i> continue by hitting x </i>";
+			intro = "Cuberts world was out of order. He could feel it. to him, but he was happy anyway.";
 			//GUI.Label(Rect(50, 50,Screen.width-100,Screen.height-100),intro, mySkin.customStyles[0]);
 			break;
 		case State.Movement:
@@ -126,8 +126,21 @@ function OnGUI(){
 			text = "";
 	}
 	
-	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height), mySkin.customStyles[0]);
-	GUILayout.Label(instruction, mySkin.customStyles[1]);
+	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height));
+	GUILayout.Label(intro, mySkin.customStyles[0]);
+	GUILayout.Label("Balls: " + cubert.currentLevel.ballCounter + " / " + cubert.currentLevel.ballContingent, mySkin.customStyles[2]);
+	#if UNITY_STANDALONE
+	if(GUILayout.Button("Reset Level", mySkin.customStyles[1])) {
+      cubert.currentLevel.resetLevel();
+      cubert.Respawn();
+    }
+    if(GUILayout.Button("Go to last Checkpoint", mySkin.customStyles[1])) {
+    cubert.Respawn();
+  	}
+  	if(GUILayout.Button("Restart Game", mySkin.customStyles[1])) {
+        cubert.restartGame();
+    }
+    #endif
 	GUILayout.EndArea();
 
 }

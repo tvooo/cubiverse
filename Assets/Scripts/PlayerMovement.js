@@ -23,7 +23,6 @@ private var flickerTimeout: int;
 
 public var scream: AudioClip;
 public var jump: AudioClip;
-private var jump: AnimationState;
 
 private var btnSize: int = Screen.height / 5;;
 
@@ -165,7 +164,6 @@ function Respawn() {
      var direction: Vector3;
     direction = getUpwards();
     rigidbody.AddForce(direction * jumpPower, ForceMode.Impulse);
-    animation.Play("jump");
     jumpState = JumpState.Jumped;
 }
 
@@ -205,8 +203,3 @@ function restartGame() {
     Respawn();
 }
 
-function OnGUI() {
-    if(GUI.Button(Rect(Screen.width - 110,10,100,30), "Restart Game")) {
-        restartGame();
-    }
-}

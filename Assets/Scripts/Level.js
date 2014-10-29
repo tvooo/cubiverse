@@ -27,8 +27,8 @@ public var startState: State;
 /* Private variables */
 private var currentSphere: BaseSphere;
 private var isActive: boolean = false;
-private var balls: BaseSphere[];
-private var ballCounter: int;
+public var balls: BaseSphere[];
+public var ballCounter: int;
 private var landscapes: Component[];
 private var spawnProgress: SpawnProgress = SpawnProgress.Idle;
 private var spawnZoomInverse: boolean = true;
@@ -222,18 +222,6 @@ function addSphere(sphere: BaseSphere) {
 
 function hasBalls() {
   return ballCounter > 0;
-}
-
-function OnGUI() {
-  if(isActive && GUI.Button(Rect(Screen.width - 220,10,100,30), "Reset Level")) {
-    resetLevel();
-    cubert.Respawn();
-  }
-  if(isActive && GUI.Button(Rect(Screen.width - 380,10,150,30), "Go to last Checkpoint")) {
-    //resetLevel();
-    cubert.Respawn();
-  }
-  if(isActive) GUI.Label (Rect (Screen.width - 450, 15, 70, 50), "Balls:" + ballCounter + "/" + ballContingent);
 }
 
 
