@@ -77,7 +77,7 @@ function OnGUI(){
 	switch(state) {
 		case State.StartLevel1:
 			intro = "Cuberts world was out of order. He could feel it. Something did not work as it used to. His nice, square world broke apart. He never really understood the rules of this world, they felt a little made up to him, but he was happy anyway. He needed to fix it! And he knew he could, because - Cubert had superpowers! Or - at least, powers.  Something was different about him. Whatever it was that was gone from his world and let it drift apart, it was still with him. And maybe he could share it? Spread it somehow, to put everything back into place? He would need help though. He had super powers, but he was a cube after all. <i> continue by hitting x </i>";
-			GUI.Label(Rect(50, 50,Screen.width-100,Screen.height-100),intro, mySkin.customStyles[0]);
+			//GUI.Label(Rect(50, 50,Screen.width-100,Screen.height-100),intro, mySkin.customStyles[0]);
 			break;
 		case State.Movement:
 			text = "First, he needed to get going. Start moving. For a cube, cubert was quite agile.";
@@ -103,7 +103,7 @@ function OnGUI(){
 			intro = "He made it! Cubert discovered another island. Cubert, the emporer. He liked the sound of this title. Cubert decided to continue his brave journey and to share more of his cubic awesomenes!  <i> continue by hitting x </i>"; 
 			text="";
 			instruction = "";
-			GUI.Label(Rect((Screen.width/2)-250, (Screen.height/2)-250,500,500),intro, mySkin.customStyles[0]);
+			//GUI.Label(Rect((Screen.width/2)-250, (Screen.height/2)-250,500,500),intro, mySkin.customStyles[0]);
 			break; 
 		case State.Killerball:
 			text = "But what was that over there, that round... reddish... thing? THAT looked nasty. Nasty and dangerous. Of course, Cubert was not afraid. He was only careful, another of his great character traits. Being careful is extential to great success. Of course, so far he was reborn quite hasselfree, but we do not want to be too reckless, do we?"; 
@@ -112,7 +112,7 @@ function OnGUI(){
 			intro = "Cubert was impressed by himself. He knew he was great, but his never ending thirst for adventure suprised even him. And how beautiful this world was! From here, he could see the small island he started from. He had come a long way... "; 
 			text="";
 			instruction = "";
-			GUI.Label(Rect((Screen.width/2)-250, (Screen.height/2)-250,500,500),intro, mySkin.customStyles[0]);
+			//GUI.Label(Rect((Screen.width/2)-250, (Screen.height/2)-250,500,500),intro, mySkin.customStyles[0]);
 			break;
 		case State.Rotation:
 			text = "And there was more to discover. On this island, there was more moving than just him. How exciting! Cubert was sure, he could use that to travel even further. Lets see if they would be able to carry him! Also something else was different. Cubert himself felt different. Stronger. Yes, even stronger than before. It was the type of satisfaction which goes with a new ability. He learned something new!";
@@ -126,9 +126,8 @@ function OnGUI(){
 			text = "";
 	}
 	
-	GUILayout.BeginArea(Rect(50,50,500,500));
-	GUILayout.Label(text, mySkin.customStyles[1]);
-	GUILayout.Label(instruction, mySkin.customStyles[2]);
+	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height), mySkin.customStyles[0]);
+	GUILayout.Label(instruction, mySkin.customStyles[1]);
 	GUILayout.EndArea();
 
 }

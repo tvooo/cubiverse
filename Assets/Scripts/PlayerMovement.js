@@ -19,8 +19,8 @@ private var checkPoint: Transform;
 
 private var flickerTimeout: int;
 
-private var jump: AnimationState;
-
+public var scream: AudioClip;
+public var jump: AudioClip;
 
 function getUpwards() {
     if ( rigidbody.velocity.magnitude != 0) {
@@ -61,6 +61,7 @@ function Update () {
         jumpState = JumpState.Grounded;
     if(Input.GetButtonDown("MyJump") && jumpState == JumpState.Grounded) {
         Jump();
+        audio.PlayOneShot(jump);
     }
     Walk( h );
     flickerTimeout -= Time.deltaTime;
@@ -77,7 +78,8 @@ function OnCollisionEnter(collision: Collision) {
     if (collision.other.gameObject.name == "PlaneOfDeath") {
         Debug.Log("Cubert fell down into the abyss...");
         //gui.state = State.Death;
-        Respawn();
+		audio.PlayOneShot(scream);
+        die();
     }
 }
 
@@ -102,9 +104,6 @@ function Start() {
     currentLevel.enter();
     rigidbody.MovePosition(checkPoint.position);
     rigidbody.constraints = currentLevel.getConstraints();
-
-    animation["jump"].wrapMode = WrapMode.Once;
-	jump = animation["jump"];
 }
 
 function nextLevel(level: Level) {
@@ -121,6 +120,7 @@ function nextLevel(level: Level) {
 
 function die() {
     Respawn();
+    audio.PlayOneShot(scream);
 }
 
 function Respawn() {
