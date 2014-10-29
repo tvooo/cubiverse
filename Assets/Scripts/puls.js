@@ -1,9 +1,8 @@
 ﻿#pragma strict
 
-function Start () {
+public var sizeFactor: float = 0.8f;
+public var speed: float = 4f;
 
-}
-
-function Update () {	
-	transform.localScale += Vector3(0.1,0.1,0.1) * Mathf.Sin(Time.deltaTime);
+function Update () {
+	transform.localScale += Vector3(sizeFactor, sizeFactor, sizeFactor) * (Mathf.Sin(Time.time * speed) / 100 );
 }
