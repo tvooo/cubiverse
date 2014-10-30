@@ -108,12 +108,9 @@ function OnGUI(){
 			text = "";
 	}
 
-
 	#if UNITY_STANDALONE
 		GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height));
 	#endif
-
-
 
 	#if UNITY_ANDROID
 		GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/2 - Screen.width/25,Screen.height/5));

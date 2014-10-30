@@ -83,7 +83,7 @@ function Update() {
   var layerMask = 1 << 9;
   var size: float;
 
-  if(!isActive)
+  if(!isActive || !cubert.isEnabled)
     return;
 
   if(hasBalls() && spawnProgress == SpawnProgress.Idle && Input.GetButtonDown("Spawn Gravity Sphere")) {

@@ -23,6 +23,7 @@ private var rightBtn: Rect = new Rect(10+btnSize, Screen.height-10-btnSize, btnS
 private var jumpBtn: Rect = new Rect(Screen.width-10-btnSize, Screen.height-10-btnSize, btnSize, btnSize);
 private var checkPoint: Transform;
 private var flickerTimeout: int;
+private var h: float = 0f;
 
 function getUpwards() {
     if ( rigidbody.velocity.magnitude != 0 || rigidbody.angularVelocity.magnitude != 0) {
@@ -56,8 +57,10 @@ function getUpwards() {
 function Update () {
 	if(!isEnabled)
 	  return;
-    var h : float = Input.GetAxis("Walk");
-    var walking: boolean = false;
+    h = 0;
+    #if UNITY_STANDALONE
+        h = Input.GetAxis("Walk");
+    #endif
 
     if(isGrounded())
         jumpState = JumpState.Grounded;
@@ -65,7 +68,7 @@ function Update () {
         Jump();
         audio.PlayOneShot(jump);
     }
-    Walk( h );
+
 
     //Debug.DrawLine(transform.position, (transform.position + transform.forward), Color.red);
     //Debug.DrawLine(transform.position, (transform.position + getUpwards()), isGrounded() ? Color.blue : Color.yellow);
@@ -75,13 +78,11 @@ function Update () {
     for(var t: Touch in Input.touches) {
         var vec: Vector2 = t.position;
         vec.y = Screen.height - vec.y; // You need to invert since GUI and screen have differnet coordinate system
-        if(leftBtn.Contains(vec) && !walking) {
-            Walk(-1);
-            walking = true;
+        if(leftBtn.Contains(vec)) {
+            h = -1;
         }
-        if(rightBtn.Contains(vec) && !walking) {
-            Walk(1);
-            walking = true;
+        if(rightBtn.Contains(vec)) {
+            h = 1;
         }
         if(jumpBtn.Contains(vec) && jumpState == JumpState.Grounded) {
             Jump();
@@ -94,6 +95,10 @@ function Update () {
 
     flickerTimeout -= Time.deltaTime;
     GetComponent(Flicker).animate = flickerTimeout > 0;
+}
+
+function FixedUpdate() {
+    Walk(h);
 }
 
 function isGrounded() {
