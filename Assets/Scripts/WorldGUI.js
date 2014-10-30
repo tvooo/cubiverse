@@ -110,21 +110,21 @@ function OnGUI(){
 	}
 
 /*	#if UNITY_STANDALONE
-	
+
 	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height));
-	
+
 	#endif
-	
+
 	#if UNITY_STANDALONE
-	
+
 	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width,Screen.height/5));
 	GUILayout.BeginHorizontal();
-	
+
 	#endif */
-	
+
 	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height));
 	GUILayout.Label(instruction, mySkin.customStyles[0]);
-	GUILayout.Label("Balls: " + cubert.currentLevel.ballCounter + " / " + cubert.currentLevel.ballContingent, mySkin.customStyles[2]);
+	GUILayout.Label("Spheres: " + cubert.currentLevel.ballCounter + " / " + cubert.currentLevel.ballContingent, mySkin.customStyles[2]);
 	#if UNITY_STANDALONE
 	if(GUILayout.Button("Reset Level", mySkin.customStyles[1])) {
       cubert.currentLevel.resetLevel();
