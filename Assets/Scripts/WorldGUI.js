@@ -122,6 +122,19 @@ function OnGUI(){
 			text = "";
 	}
 
+/*	#if UNITY_STANDALONE
+	
+	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height));
+	
+	#endif
+	
+	#if UNITY_STANDALONE
+	
+	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width,Screen.height/5));
+	GUILayout.BeginHorizontal();
+	
+	#endif */
+	
 	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height));
 	GUILayout.Label(instruction, mySkin.customStyles[0]);
 	GUILayout.Label("Balls: " + cubert.currentLevel.ballCounter + " / " + cubert.currentLevel.ballContingent, mySkin.customStyles[2]);
