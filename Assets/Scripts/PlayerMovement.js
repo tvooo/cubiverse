@@ -15,6 +15,7 @@ public var walkPower: float = 10f;
 
 public var jumpState: JumpState;
 public var gui: WorldGUI;
+public var isEnabled: boolean = false;
 
 public var moving: boolean = false;
 
@@ -61,6 +62,8 @@ function getUpwards() {
 }
 
 function Update () {
+	if(!isEnabled)
+	  return;
     var h : float = Input.GetAxis("Walk");
     var walking: boolean = false;
 

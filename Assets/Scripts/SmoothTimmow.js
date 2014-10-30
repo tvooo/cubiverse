@@ -48,3 +48,7 @@ function LateUpdate () {
   // Always look at the target
   transform.LookAt (target);
 }
+
+function enablePlayerMovement() {
+  player.isEnabled = true;
+}
