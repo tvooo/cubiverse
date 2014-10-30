@@ -164,10 +164,14 @@ function Respawn() {
 }
 
  function Jump() {
-     var direction: Vector3;
-    direction = getUpwards();
+    var direction: Vector3 = getUpwards();
     rigidbody.AddForce(direction * jumpPower, ForceMode.Impulse);
     jumpState = JumpState.Jumped;
+    if(currentLevel.gameObject.name == "Level 1" && gui.state == State.Movement) {
+        gui.state = State.Sphere;
+        speech.Stop();
+        speech.PlayOneShot(gui.sndSuperhero);
+    }
 }
 
 function Walk(horizontal : float)

@@ -39,27 +39,7 @@ private var instruction : String;
 public var cubert: PlayerMovement;
 
 function Update () {
-			// Level 1
-	if(cubert.currentLevel.gameObject.name == "Level 1") {
-		/*if(Input.GetKey("x")  && state == State.StartLevel1){
-			state = State.Movement;
-			cubert.speech.Stop();
-			cubert.speech.PlayOneShot(sndLevel1);
-		} else*/ if (Input.GetKey("space")  && state == State.Movement){
-			state = State.Sphere;
-			cubert.speech.Stop();
-			cubert.speech.PlayOneShot(sndSuperhero);
-		}/* else if (Input.GetKey("g")  && state == State.Sphere){
-			cubert.speech.Stop();
-			cubert.speech.PlayOneShot(sndCubifly);
-			state = State.Power;
-		} else if (Input.GetKey("g") && state == State.Power){
-			state = State.Checkpoint;
-			cubert.speech.Stop();
-			cubert.speech.PlayOneShot(sndEnergy);
-		}*/
-		//Level 2
-	} else if(cubert.currentLevel.gameObject.name == "Level 2" ) {
+	if(cubert.currentLevel.gameObject.name == "Level 2" ) {
 		if (state == State.House){
 			state = State.StartLevel2;
 			cubert.speech.Stop();
@@ -73,13 +53,7 @@ function Update () {
 			state = State.StartLevel3;
 			cubert.speech.Stop();
 			cubert.speech.PlayOneShot(sndLevel3);
-		}/* else if(state == State.Repulsion){
-			state = State.PostRepulsion;
-		} else if(Input.GetKey("r") && state == state.PostRepulsion){
-			state = state.Empty;
-			cubert.speech.Stop();
-			cubert.speech.PlayOneShot(sndRepsphere2);
-		}*/
+		}
 	}
 }
 
@@ -96,13 +70,30 @@ function OnGUI(){
 
 	switch(state) {
 		case State.Movement:
-			instruction = "Press <- -> to move, and space to jump.";
+			#if UNITY_ANDROID
+			  instruction = "Use the soft buttons on the bottom of the screen to move and jump.";
+			#endif
+			#if UNITY_STANDALONE
+				instruction = "Press <- -> to move, and space to jump.";
+			#endif
+
+
 			break;
 		case State.Sphere:
-			instruction = "Press G to spawn a gravity sphere. As soon as you spawned a gravity sphere, you can position it using your cursor. Hold the mouse button clicked and pull the cursor out to control the strength of the sphere.";
+			#if UNITY_ANDROID
+				instruction = "Pinch two fingers towards each other to spawn and position a Gravity Sphere. The closer your fingers get, the strongers the sphere will be.";
+			#endif
+			#if UNITY_STANDALONE
+				instruction = "Press G to spawn a Gravity Sphere. As soon as you spawned a Gravity Sphere, you can position it using your cursor. Hold the mouse button clicked and pull the cursor out to control the strength of the Sphere.";
+			#endif
 			break;
 		case State.StartLevel3:
-			instruction = "Press R to create a repulsion sphere. You can handle them just like gravity spheres.";
+			#if UNITY_ANDROID
+				instruction = "Pinch two fingers apart from each other to spawn and position a Repulsion Sphere. The farther apart your fingers get, the strongers the sphere will be.";
+			#endif
+			#if UNITY_STANDALONE
+				instruction = "Press R to spawn a Repulsion Sphere. You can handle them just like Gravity Spheres.";
+			#endif
 			break;
 		default:
 			text = "";
