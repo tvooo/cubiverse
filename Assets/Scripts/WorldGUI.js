@@ -5,18 +5,14 @@ var customIntro : GUIStyle;
 var customInstruction : GUIStyle;
 var customText : GUIStyle;
 
-public var sndIntro: AudioClip;
-public var sndLevel1: AudioClip;
+
 public var sndLevel2: AudioClip;
 public var sndLevel3: AudioClip;
 public var sndMagicHouse: AudioClip;
-public var sndCubifly: AudioClip;
 public var sndSuperhero: AudioClip;
-public var sndEnergy: AudioClip;
 public var sndDeathsphere: AudioClip;
 public var sndRepsphere: AudioClip;
 public var sndRepsphere2: AudioClip;
-//public var sndMagicHouse: AudioClip;
 
 private var rctOff : RectOffset;
 
@@ -37,7 +33,7 @@ public enum State {
 	Empty
 }
 
-public var state: State = State.StartLevel1;
+public var state: State = State.Movement;
 private var text : String;
 private var intro : String;
 private var instruction : String;
@@ -46,15 +42,15 @@ public var cubert: PlayerMovement;
 function Update () {
 			// Level 1
 	if(cubert.currentLevel.gameObject.name == "Level 1") {
-		if(Input.GetKey("x")  && state == State.StartLevel1){
+		/*if(Input.GetKey("x")  && state == State.StartLevel1){
 			state = State.Movement;
 			cubert.speech.Stop();
 			cubert.speech.PlayOneShot(sndLevel1);
-		} else if (Input.GetKey("space")  && state == State.Movement){
+		} else*/ if (Input.GetKey("space")  && state == State.Movement){
 			state = State.Sphere;
 			cubert.speech.Stop();
 			cubert.speech.PlayOneShot(sndSuperhero);
-		} else if (Input.GetKey("g")  && state == State.Sphere){
+		}/* else if (Input.GetKey("g")  && state == State.Sphere){
 			cubert.speech.Stop();
 			cubert.speech.PlayOneShot(sndCubifly);
 			state = State.Power;
@@ -62,7 +58,7 @@ function Update () {
 			state = State.Checkpoint;
 			cubert.speech.Stop();
 			cubert.speech.PlayOneShot(sndEnergy);
-		}
+		}*/
 		//Level 2
 	} else if(cubert.currentLevel.gameObject.name == "Level 2" ) {
 		if (state == State.House){
@@ -78,22 +74,13 @@ function Update () {
 			state = State.StartLevel3;
 			cubert.speech.Stop();
 			cubert.speech.PlayOneShot(sndLevel3);
-		} else if(state == State.Repulsion){
+		}/* else if(state == State.Repulsion){
 			state = State.PostRepulsion;
 		} else if(Input.GetKey("r") && state == state.PostRepulsion){
 			state = state.Empty;
 			cubert.speech.Stop();
 			cubert.speech.PlayOneShot(sndRepsphere2);
-		}
-	}
-	//Debug.Log(GameObject.Find("Main Camera").GetComponent(Animation).isPlaying);
-}
-
-function Start() {
-	if(state == State.StartLevel1) {
-		cubert.speech.Stop();
-		cubert.speech.PlayOneShot(sndIntro);
-		GameObject.Find("Main Camera").GetComponent(Animation).Play("Intro2");
+		}*/
 	}
 }
 

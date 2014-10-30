@@ -2,35 +2,27 @@
 
 enum JumpState {Grounded, Jumped};
 
-//public var spawnPoint: Transform;
 public var currentLevel: Level;
-
-public var turnSmoothing : float = 15f;     // A smoothing value for turning the player.
-public var speedDampTime : float = 0.1f;    // The damping for the speed parameter
+//public var turnSmoothing : float = 15f;     // A smoothing value for turning the player.
+//public var speedDampTime : float = 0.1f;    // The damping for the speed parameter
 public var speech: AudioSource;
-private var grounded: boolean = false;
 public var sndKill: AudioClip[];
 public var jumpPower: float = 5.0f;
 public var walkPower: float = 10f;
-
 public var jumpState: JumpState;
 public var gui: WorldGUI;
 public var isEnabled: boolean = false;
-
 public var moving: boolean = false;
-
-private var checkPoint: Transform;
-
-private var flickerTimeout: int;
-
 public var scream: AudioClip;
 public var jump: AudioClip;
 
+private var grounded: boolean = false;
 private var btnSize: int = Screen.height / 5;;
-
 private var leftBtn: Rect = new Rect(10, Screen.height-10-btnSize, btnSize, btnSize);
 private var rightBtn: Rect = new Rect(10+btnSize, Screen.height-10-btnSize, btnSize, btnSize);
 private var jumpBtn: Rect = new Rect(Screen.width-10-btnSize, Screen.height-10-btnSize, btnSize, btnSize);
+private var checkPoint: Transform;
+private var flickerTimeout: int;
 
 function getUpwards() {
     if ( rigidbody.velocity.magnitude != 0 || rigidbody.angularVelocity.magnitude != 0) {
@@ -108,7 +100,7 @@ function isGrounded() {
 }
 
 function OnCollisionEnter(collision: Collision) {
-    if (collision.other.gameObject.name == "PlaneOfDeath") {
+    if (collision.collider.gameObject.name == "PlaneOfDeath") {
         die();
     }
 }
@@ -129,8 +121,7 @@ function Start() {
     Random.seed = 42;
     rigidbody.velocity = Vector3.zero;
     rigidbody.angularVelocity = Vector3.zero;
-    //rigidbody.MoveRotation(Quaternion.Euler(0, 0, 90));
-    rigidbody.MoveRotation(Quaternion.Euler(0, currentLevel.rotation, 0));
+    rigidbody.MoveRotation(Quaternion.Euler(0, 90 + currentLevel.rotation, 0));
     checkPoint = currentLevel.getSpawnPoint();
     currentLevel.enter();
     rigidbody.MovePosition(checkPoint.position);
@@ -143,7 +134,7 @@ function nextLevel(level: Level) {
     currentLevel.enter();
     rigidbody.velocity = Vector3.zero;
     rigidbody.angularVelocity = Vector3.zero;
-    rigidbody.MoveRotation(Quaternion.Euler(0, 0, 0));
+    rigidbody.MoveRotation(Quaternion.Euler(0, 90 + currentLevel.rotation, 0));
     checkPoint = currentLevel.getSpawnPoint();
     rigidbody.MovePosition(checkPoint.position);
     rigidbody.constraints = currentLevel.getConstraints();
@@ -162,7 +153,7 @@ function Respawn() {
     GetComponent(Flicker).animate = true;
     rigidbody.velocity = Vector3.zero;
     rigidbody.angularVelocity = Vector3.zero;
-    rigidbody.MoveRotation(Quaternion.Euler(0, 0, 0));
+    rigidbody.MoveRotation(Quaternion.Euler(0, 90 + currentLevel.rotation, 0));
     rigidbody.MovePosition(checkPoint.transform.position);
 }
 
@@ -201,7 +192,7 @@ function restartGame() {
 
     rigidbody.velocity = Vector3.zero;
     rigidbody.angularVelocity = Vector3.zero;
-    rigidbody.MoveRotation(Quaternion.Euler(0, 0, 0));
+    rigidbody.MoveRotation(Quaternion.Euler(0, 90 + currentLevel.rotation, 0));
     rigidbody.MovePosition(checkPoint.position);
     rigidbody.constraints = currentLevel.getConstraints();
 

@@ -1,3 +1,5 @@
+#pragma strict
+
 public enum MoveConstraint {
   Horizontal,
   Vertical
@@ -9,6 +11,12 @@ public enum SpawnProgress {
   Zoom,
   Fix,
   Idle
+}
+
+public enum SphereStory {
+  None,
+  First,
+  Second
 }
 
 /* Public variables */
@@ -23,6 +31,8 @@ public var cubert: PlayerMovement;
 public var gravitySpherePrefab: GravSphere;
 public var repulsionSpherePrefab: RepSphere;
 public var startState: State;
+public var sndEnergy: AudioClip;
+public var sndCubifly: AudioClip;
 
 /* Private variables */
 private var currentSphere: BaseSphere;
@@ -32,6 +42,7 @@ public var ballCounter: int;
 private var landscapes: Component[];
 private var spawnProgress: SpawnProgress = SpawnProgress.Idle;
 private var spawnZoomInverse: boolean = true;
+private var sphereStory: SphereStory = SphereStory.None;
 
 function Start() {
   landscapes = GetComponentsInChildren(Transformable);
@@ -204,8 +215,22 @@ function Update() {
   }
 
   if(spawnProgress == SpawnProgress.Fix) {
+    if(gameObject.name == "Level 3" && sphereStory == SphereStory.None && currentSphere.GetComponent(RepSphere)) {
+      cubert.speech.Stop();
+      cubert.speech.PlayOneShot(sndCubifly);
+      sphereStory = SphereStory.First;
+    }
     currentSphere = null;
     spawnProgress = SpawnProgress.Idle;
+    if(gameObject.name == "Level 1" && sphereStory == SphereStory.None) {
+      cubert.speech.Stop();
+      cubert.speech.PlayOneShot(sndCubifly);
+      sphereStory = SphereStory.First;
+    } else if(gameObject.name == "Level 1" && sphereStory == SphereStory.First) {
+      cubert.speech.Stop();
+      cubert.speech.PlayOneShot(sndEnergy);
+      sphereStory = SphereStory.Second;
+    }
   }
 }
 
