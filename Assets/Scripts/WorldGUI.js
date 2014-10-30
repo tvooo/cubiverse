@@ -103,39 +103,47 @@ function OnGUI(){
 			break;
 		case State.StartLevel3:
 			instruction = "Press R to create a repulsion sphere. You can handle them just like gravity spheres.";
-			break; 
+			break;
 		default:
 			text = "";
 	}
 
-/*	#if UNITY_STANDALONE
 
-	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height));
-
+	#if UNITY_STANDALONE
+		GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height));
 	#endif
 
-	#if UNITY_STANDALONE
 
-	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width,Screen.height/5));
-	GUILayout.BeginHorizontal();
 
-	#endif */
+	#if UNITY_ANDROID
+		GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/2 - Screen.width/25,Screen.height/5));
+		GUILayout.BeginHorizontal();
+	#endif
 
-	GUILayout.BeginArea(Rect(Screen.width/50,Screen.height/50,Screen.width/5,Screen.height));
 	GUILayout.Label(instruction, mySkin.customStyles[0]);
 	GUILayout.Label("Spheres: " + cubert.currentLevel.ballCounter + " / " + cubert.currentLevel.ballContingent, mySkin.customStyles[2]);
-	#if UNITY_STANDALONE
+
+	#if UNITY_ANDROID
+		GUILayout.EndHorizontal();
+		GUILayout.EndArea();
+		GUILayout.BeginArea(Rect(Screen.width/2 + Screen.width/50,Screen.height/50,Screen.width/2 - Screen.width/25,Screen.height/5));
+		GUILayout.BeginHorizontal();
+	#endif
 	if(GUILayout.Button("Reset Level", mySkin.customStyles[1])) {
-      cubert.currentLevel.resetLevel();
-      cubert.Respawn();
-    }
-    if(GUILayout.Button("Go to last Checkpoint", mySkin.customStyles[1])) {
+    cubert.currentLevel.resetLevel();
     cubert.Respawn();
-  	}
-  	if(GUILayout.Button("Restart Game", mySkin.customStyles[1])) {
-        cubert.restartGame();
-    }
-    #endif
+  }
+  if(GUILayout.Button("Go to last Checkpoint", mySkin.customStyles[1])) {
+  cubert.Respawn();
+	}
+	if(GUILayout.Button("Restart Game", mySkin.customStyles[1])) {
+      cubert.restartGame();
+  }
+
+  #if UNITY_ANDROID
+  	GUILayout.EndHorizontal();
+  #endif
+
 	GUILayout.EndArea();
 
 }

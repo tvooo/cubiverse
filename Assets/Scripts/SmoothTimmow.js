@@ -51,8 +51,6 @@ function LateUpdate () {
 
 function enablePlayerMovement() {
   player.isEnabled = true;
-  //gameObject.Find("HoldGUI").GetComponent(WorldGUI).state = State.Movement;
   player.speech.Stop();
-  Debug.Log(player.speech.sndLevel1);
   player.speech.PlayOneShot(player.speech.GetComponent(Speech).sndLevel1);
 }

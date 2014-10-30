@@ -66,11 +66,9 @@ function Update () {
         audio.PlayOneShot(jump);
     }
     Walk( h );
-    flickerTimeout -= Time.deltaTime;
-    GetComponent(Flicker).animate = flickerTimeout > 0;
 
-    Debug.DrawLine(transform.position, (transform.position + transform.forward), Color.red);
-    Debug.DrawLine(transform.position, (transform.position + getUpwards()), isGrounded() ? Color.blue : Color.yellow);
+    //Debug.DrawLine(transform.position, (transform.position + transform.forward), Color.red);
+    //Debug.DrawLine(transform.position, (transform.position + getUpwards()), isGrounded() ? Color.blue : Color.yellow);
 
     #if UNITY_ANDROID
     moving = false;
@@ -93,6 +91,9 @@ function Update () {
         }
     }
     #endif
+
+    flickerTimeout -= Time.deltaTime;
+    GetComponent(Flicker).animate = flickerTimeout > 0;
 }
 
 function isGrounded() {
