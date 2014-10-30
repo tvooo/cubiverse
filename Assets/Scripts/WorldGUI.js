@@ -14,8 +14,6 @@ public var sndDeathsphere: AudioClip;
 public var sndRepsphere: AudioClip;
 public var sndRepsphere2: AudioClip;
 
-private var rctOff : RectOffset;
-
 private var Look : String;
 public enum State {
 	Movement,
@@ -30,6 +28,7 @@ public enum State {
 	Rotation,
 	Repulsion,
 	PostRepulsion,
+	End,
 	Empty
 }
 
@@ -104,7 +103,7 @@ function OnGUI(){
 			break;
 		case State.StartLevel3:
 			instruction = "Press R to create a repulsion sphere. You can handle them just like gravity spheres.";
-			break;
+			break; 
 		default:
 			text = "";
 	}
