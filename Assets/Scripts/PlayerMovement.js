@@ -3,8 +3,6 @@
 enum JumpState {Grounded, Jumped};
 
 public var currentLevel: Level;
-//public var turnSmoothing : float = 15f;     // A smoothing value for turning the player.
-//public var speedDampTime : float = 0.1f;    // The damping for the speed parameter
 public var speech: AudioSource;
 public var sndKill: AudioClip[];
 public var jumpPower: float = 5.0f;
@@ -13,11 +11,13 @@ public var jumpState: JumpState;
 public var gui: WorldGUI;
 public var isEnabled: boolean = false;
 public var moving: boolean = false;
-public var scream: AudioClip;
 public var jump: AudioClip;
+public var leftTexture: Texture2D;
+public var rightTexture: Texture2D;
+public var jumpTexture: Texture2D;
 
 private var grounded: boolean = false;
-private var btnSize: int = Screen.height / 5;;
+private var btnSize: int = Screen.height / 5;
 private var leftBtn: Rect = new Rect(10, Screen.height-10-btnSize, btnSize, btnSize);
 private var rightBtn: Rect = new Rect(10+btnSize, Screen.height-10-btnSize, btnSize, btnSize);
 private var jumpBtn: Rect = new Rect(Screen.width-10-btnSize, Screen.height-10-btnSize, btnSize, btnSize);
@@ -198,4 +198,16 @@ function restartGame() {
 
     Respawn();
 }
+
+#if UNITY_ANDROID
+
+function OnGUI() {
+    if(!isEnabled)
+        return;
+    GUI.DrawTexture( leftBtn, leftTexture );
+    GUI.DrawTexture( rightBtn, rightTexture );
+    GUI.DrawTexture( jumpBtn, jumpTexture );
+}
+
+#endif
 
