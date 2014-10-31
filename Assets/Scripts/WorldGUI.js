@@ -6,6 +6,7 @@ var customInstruction : GUIStyle;
 var customText : GUIStyle;
 
 
+
 public var sndLevel2: AudioClip;
 public var sndLevel3: AudioClip;
 public var sndMagicHouse: AudioClip;
@@ -67,6 +68,7 @@ function OnCollisionEnter(collision : Collision){
 
 function OnGUI(){
 	GUI.skin = mySkin;
+
 
 	switch(state) {
 		case State.Movement:
